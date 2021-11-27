@@ -105,7 +105,7 @@ const NoteState = (props)=>{
       // updating a note
       const updateNote = async (id,title,description,tag)=>{
         console.log("updating note...")
-        // API CALL for fetching data.
+        // API CALL for updating data.
         const url = host +"/api/notes/updatenotes/"+id;
         const response = await fetch(url, {
           method: 'PUT', // *GET, POST, PUT, DELETE, etc.
@@ -133,8 +133,21 @@ const NoteState = (props)=>{
       }
 
       // deleting a note
-      const deleteNote=(id)=>{
+      const deleteNote = async (id)=>{
         console.log("deleting note... with id : " + id)
+        // API CALL for deleting data.
+        const url = host +"/api/notes/deletenotes/"+id;
+        const response = await fetch(url, {
+          method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/json',
+            'auth-token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0ZjY2YTM2MzQ0ODZkMTUwMjJhYWQ5In0sImlhdCI6MTYzNTg3MTI5Mn0.Wk8mcnCrfMSddmZs5r8dST1jGleUrPOxsMNRc3hjJW8'
+          }
+
+        });
+        // return response.json();
+        const result = await response.json();
+        console.log(result);
         const newNotes = notes.filter((note)=>{
           // the notes whose id  do not matches with the id of note to be deleted will remain in newNotes else whose id matches will be deleted .
           return note._id !== id;
