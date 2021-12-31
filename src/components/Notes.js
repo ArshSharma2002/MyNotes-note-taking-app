@@ -3,10 +3,10 @@ import NoteContext from "../context/notes/NotesContext";
 import NoteItem from "./NoteItem";
 
 const Notes = () => {
-  const [updateNote, setUpdateNote] = useState({updatedtitle:"",updatedtag:"",updateddescription:""})
+  const [note, setNote] = useState({id:"",etitle:"",etag:"",edescription:""})
 
   const notesContext = useContext(NoteContext);
-  const { notes, getNotes } = notesContext;
+  const { notes, getNotes, updateNote } = notesContext;
 
   useEffect(() => {
     getNotes();
@@ -14,19 +14,26 @@ const Notes = () => {
   }, []);
 
 
-// useRef hook is used to give reference to an element here we are refering open modal button via edit   note button
+// useRef hook is used to give reference to an element here we are refering open modal button via edit  note button
   const ref = useRef(null);
+  const refClose = useRef(null);
 
   const editNote = (currentNote) => {
     ref.current.click();
-    setUpdateNote({updatedtitle:currentNote.title,updatedtag:currentNote.tag,updateddescription:currentNote.description})
+    setNote({id:currentNote._id,etitle:currentNote.title,etag:currentNote.tag,edescription:currentNote.description})
 
   };
 
+  const handleOnClick = (e) =>{
+    console.log("updating the note...",note)
+    updateNote(note.id,note.etitle,note.edescription,note.etag)
+    refClose.current.click();
+  }
 
   const onChange = (e) => {
     // e.target.name means 'name' attribute of the input tag becomes equals to the value of that input tag that we are entering . for eg. if name="title" than title :"value we are entering in the input tag" .
-    setUpdateNote({ ...updateNote, [e.target.name]: e.target.value });
+    setNote({ ...note, [e.target.name]: e.target.value });
+    
   };
 
   return (
@@ -64,42 +71,46 @@ const Notes = () => {
             <div className="modal-body">
               <form>
                 <div className="mb-3">
-                  <label htmlFor="updatedtitle" className="form-label">
+                  <label htmlFor="etitle" className="form-label">
                     Title
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id="updatedtitle"
-                    name="updatedtitle"
-                    value={updateNote.updatedtitle}
+                    id="etitle"
+                    name="etitle"
+                    value={note.etitle}
                     aria-describedby="emailHelp"
                     onChange={onChange}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="updateddescription" className="form-label">
+                  <label htmlFor="edescription" className="form-label">
                     Description
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id="updateddescription"
-                    name="updateddescription"
-                    value={updateNote.updateddescription}
+                    id="edescription"
+                    name="edescription"
+                    value={note.edescription}
                     onChange={onChange}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="updatedtag" className="form-label">
+                  <label htmlFor="etag" className="form-label">
                     Tag
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id="updatedtag"
-                    name="updatedtag"
-                    value={updateNote.updatedtag}
+                    id="etag"
+                    name="etag"
+                    value={note.etag}
                     onChange={onChange}
                   />
                 </div>
@@ -110,10 +121,11 @@ const Notes = () => {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                ref={refClose}
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button disabled={note.etitle.length<5 || note.edescription.length<5} type="button" className="btn btn-primary" onClick={handleOnClick}>
                 Update
               </button>
             </div>
@@ -125,7 +137,8 @@ const Notes = () => {
         <h2>Your Notes : </h2>
         {/* <NoteItem/> */}
         <div className="row container my-4">
-          {notes.map((note) => {
+          
+          {notes.length===0 ? "No notes to display. add some" : notes.map((note) => {
             // we are passing each note in NoteItem as props and returning <NoteItem/> . but we can also directly access the same in noteItem by using context api .
             return <NoteItem key={note._id} editNote={editNote} note={note} />;
           })}

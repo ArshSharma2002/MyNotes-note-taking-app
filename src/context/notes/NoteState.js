@@ -7,42 +7,6 @@ const NoteState = (props)=>{
     const host = "http://localhost"
 
     const initialNotes = [];
-    // {
-    //   "_id": "614f6778634486d022aae2",
-    //   "user": "614f66a3634486d15022aad9",
-    //   "title": "play BGMI",
-    //   "description": "refreshment",
-    //   "tag": "enjoy",
-    //   "date": "2021-09-25T18:16:24.412Z",
-    //   "__v": 0
-    // },
-    // {
-    //   "_id": "61520269998dc7b64be59fa",
-    //   "user": "614f66a3634486d15022aad9",
-    //   "title": "watch netflix",
-    //   "description": "for refrehment",
-    //   "tag": "enjoy",
-    //   "date": "2021-09-27T17:42:01.210Z",
-    //   "__v": 0
-    // },
-    // {
-    //   "_id": "615202698998dc7b64e59fa",
-    //   "user": "614f66a3634486d15022aad9",
-    //   "title": "watch netflix",
-    //   "description": "for refrehment",
-    //   "tag": "enjoy",
-    //   "date": "2021-09-27T17:42:01.210Z",
-    //   "__v": 0
-    // },
-    // {
-    //   "_id": "65202698998dc7b64be59fa",
-    //   "user": "614f66a3634486d15022aad9",
-    //   "title": "watch netflix",
-    //   "description": "for refrehment",
-    //   "tag": "enjoy",
-    //   "date": "2021-09-27T17:42:01.210Z",
-    //   "__v": 0
-    // }
     
     const [notes, setNotes] = useState(initialNotes)
     
@@ -85,19 +49,8 @@ const NoteState = (props)=>{
           // {title,description,tag} is an object title:title , desc:desc ...... so on .
           body: JSON.stringify({title,description,tag}) 
         });
-        const result = await response.json();
-        console.log(result);
-
-        let newNote = {
-          "_id": "65202698998dkhdgsd59fa",
-          "user": "614f66a456789sd6d15022aad9",
-          "title": title,
-          "description": description,
-          "tag": tag,
-          "date": "2021-09-27T17:42:01.210Z",
-          "__v": 0
-        };
-        // adding/conating new note to the notes state .
+        const newNote = await response.json();
+        console.log(newNote);
         setNotes(notes.concat(newNote));
       }
 
@@ -119,16 +72,21 @@ const NoteState = (props)=>{
         const result = await response.json();
         console.log(result);
 
-      // logic for updating a note .
-        for (let index = 0; index < notes.length; index++) {
-          const element = notes[index];
+        // we cannot change the state directluy in reactjs so, here we are makinga copy of note state as newNotes
+        // here we are making a copy of note state as newNotes so that we can assign updated values to the newNotes.
+        let newNotes = JSON.parse(JSON.stringify(notes))
+      // logic for updating a note at client side .
+        for (let index = 0; index < newNotes.length; index++) {
+          const element = newNotes[index];
           if (element._id === id) {
-            element.title = title;
-            element.description = description;
-            element.tag = tag;
+            newNotes[index].title = title;
+            newNotes[index].description = description;
+            newNotes[index].tag = tag;
+            break;
           }
           
         }
+        setNotes(newNotes)
         console.log("note updated with id : " + id)
       }
 

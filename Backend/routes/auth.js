@@ -17,18 +17,21 @@ router.post(
     body("password", "Enter a valid pswd min. 5 char").isLength({ min: 5 }),
   ],
   async (req, res) => {
+    var success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      success = false;
+      return res.status(400).json({ success,errors: errors.array() });
     }
 
     // check whether user with the following email id exists or not
     try {
       let user = await User.findOne({ email: req.body.email });
       if (user) {
+        success = false;
         return res
           .status(400)
-          .json({ error: "Sorry a user with this email already exists." });
+          .json({ success,error: "Sorry a user with this email already exists." });
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -47,8 +50,9 @@ router.post(
 
       const authToken = jwt.sign(data, jwtSignature);
       // console.log(authToken);
+      success = true;
+      res.json({ success, authToken });
 
-      res.json({ authToken });
     } catch (error) {
       console.error(error.message);
       res.status(400).send("Some Error Occured.");
@@ -66,6 +70,7 @@ router.post(
       .exists(),
   ],
   async (req, res) => {
+    var success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -78,7 +83,7 @@ router.post(
       if (!user) {
         return res
           .status(400)
-          .json({ error: "Try to login with correct Email/Password." });
+          .json({success, error: "Try to login with correct Email/Password." });
       }
       //  comparing user entered pswd during login with the hashed one stored in DB during user creation.
       const pswdCompare = await bcrypt.compare(password, user.password);
@@ -86,7 +91,7 @@ router.post(
       if (!pswdCompare) {
         return res
           .status(400)
-          .json({ error: "Try to login with correct Email/Password." });
+          .json({ success , error: "Try to login with correct Email/Password." });
       }
 
       const data = {
@@ -96,8 +101,9 @@ router.post(
       };
 
       const authToken = jwt.sign(data, jwtSignature);
-
-      res.json({ authToken });
+      success = true;
+      console.log("user login granted")
+      res.json({ success, authToken });
 
     } catch (error) {
       console.error(error.message);
