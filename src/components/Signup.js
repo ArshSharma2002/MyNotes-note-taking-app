@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { useHistory } from "react-router-dom";
 
-function Signup() {
+function Signup(props) {
     
     const [credentials, setCedentials] = useState({name:"",email:"",password:"",cpassword:""})
     const onChange = (e) => {
@@ -13,7 +13,7 @@ function Signup() {
 
       const history = useHistory();
 
-    const handleOnSubmit = async (e)=>{
+    const handleOnSignin = async (e)=>{
         
         e.preventDefault();
         const {name,email,password} = credentials;
@@ -32,15 +32,16 @@ function Signup() {
             // save the authtoken & redirect to home page using useHistory hook.
             localStorage.setItem('token',json.authToken)
             history.push("/login")
+            props.showAlert("Account Created Successfully" , "success")
           }
           else{
-            alert("user with this email already exists")
+            props.showAlert("Invalid details" , "danger")
           }
     }
 
   return (
     <div className="container">
-      <form onSubmit={handleOnSubmit}>
+      <form onSubmit={handleOnSignin}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name

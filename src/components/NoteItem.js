@@ -1,10 +1,15 @@
 import React, { useContext } from "react";
 import NoteContext from "../context/notes/NotesContext";
 
-const NoteItem = (props) => {
+  const NoteItem = (props) => {
   const notesContext = useContext(NoteContext);
-  const {deleteNote,updateNote} = notesContext;
+  const {deleteNote} = notesContext;
   const { note , editNote} = props;
+
+  const handleOnDelete = (e) =>{
+    deleteNote(note._id); 
+    props.showAlert("Note deleted successfuly" , "success")
+  }
 
 
   return (
@@ -24,7 +29,7 @@ const NoteItem = (props) => {
           <button onClick={()=>{editNote(note)}} >
               <i className="fa fa-pencil mx-2" ></i>
           </button>
-          <button className="mx-2" onClick={()=>{deleteNote(note._id)}} >
+          <button className="mx-2" onClick={handleOnDelete} >
               <i className="fa fa-trash mx-2" ></i>
           </button>
         </div>

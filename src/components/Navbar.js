@@ -1,4 +1,5 @@
 import React,{useEffect} from "react";
+import { useHistory } from "react-router-dom";
 import {
     Link,
     useLocation
@@ -11,6 +12,14 @@ import {
     useEffect(() => {
       // console.log(location.pathname)
     }, [location]);
+
+    const history = useHistory();
+
+    const handleLogout = ()=>{
+      localStorage.removeItem('token');
+      history.push("/login")
+      props.showAlert("Logged Out Successfuly" , "success")
+    }
 
   return (
     <>
@@ -43,10 +52,10 @@ import {
                 </Link>
               </li>
             </ul>
-            <form className="d-flex">
-              <Link class="btn btn-primary mx-3" to="/login" role="button">Login</Link>
-              <Link class="btn btn-primary" to="/signup" role="button">Signup</Link>
-            </form>
+            {!localStorage.getItem('token') ? <form className="d-flex">
+              <Link className="btn btn-primary mx-3" to="/login" role="button">Login</Link>
+              <Link className="btn btn-primary" to="/signup" role="button">Signup</Link>
+            </form> : <button onClick={handleLogout} className="btn btn-primary">Logout</button>}
           </div>
         </div>
       </nav>

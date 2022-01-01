@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { useHistory } from "react-router-dom";
 
-function Login() {
+function Login(props) {
 
 
     const [credentials, setCedentials] = useState({email:"",password:""})
@@ -15,7 +15,7 @@ function Login() {
         
       };
 
-    const handleOnSubmit = async (e)=>{
+    const handleOnLogin = async (e)=>{
         e.preventDefault();
         // fetch("http://localhost/api/auth/login")
         const response = await fetch(`http://localhost/api/auth/login`, {
@@ -33,16 +33,17 @@ function Login() {
             // save the authtoken & redirect to home page using useHistory hook.
             localStorage.setItem('token',json.authToken)
             history.push("/")
+            props.showAlert("Logged in Successfuly" , "success")
           }
           else{
-            alert("invalid credentials !")
+            props.showAlert("Invalid details" , "danger")
           }
     }
 
   return (
     <div className="container my-3">
       <h2>This is login page</h2>
-      <form onSubmit={handleOnSubmit}>
+      <form onSubmit={handleOnLogin}>
         <div className="mb-3">
           <label for="email" className="form-label">
             Email address

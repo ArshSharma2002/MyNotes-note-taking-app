@@ -1,15 +1,22 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import NoteContext from "../context/notes/NotesContext";
 import NoteItem from "./NoteItem";
 
-const Notes = () => {
-  const [note, setNote] = useState({id:"",etitle:"",etag:"",edescription:""})
+const Notes = (props) => {
 
+  const [note, setNote] = useState({id:"",etitle:"",etag:"",edescription:""})
   const notesContext = useContext(NoteContext);
   const { notes, getNotes, updateNote } = notesContext;
+  const history = useHistory();
 
   useEffect(() => {
-    getNotes();
+    if (localStorage.getItem('token')) {
+      getNotes();
+    }
+    else{
+      history.push("/login")
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -24,10 +31,11 @@ const Notes = () => {
 
   };
 
-  const handleOnClick = (e) =>{
+  const handleOnUpdate = (e) =>{
     console.log("updating the note...",note)
     updateNote(note.id,note.etitle,note.edescription,note.etag)
     refClose.current.click();
+    props.showAlert("Note updated Successfuly" , "success")
   }
 
   const onChange = (e) => {
@@ -125,7 +133,7 @@ const Notes = () => {
               >
                 Close
               </button>
-              <button disabled={note.etitle.length<5 || note.edescription.length<5} type="button" className="btn btn-primary" onClick={handleOnClick}>
+              <button disabled={note.etitle.length<5 || note.edescription.length<5} type="button" className="btn btn-primary" onClick={handleOnUpdate}>
                 Update
               </button>
             </div>
@@ -140,7 +148,7 @@ const Notes = () => {
           
           {notes.length===0 ? "No notes to display. add some" : notes.map((note) => {
             // we are passing each note in NoteItem as props and returning <NoteItem/> . but we can also directly access the same in noteItem by using context api .
-            return <NoteItem key={note._id} editNote={editNote} note={note} />;
+            return <NoteItem key={note._id}  showAlert={props.showAlert} editNote={editNote} note={note} />;
           })}
         </div>
       </div>

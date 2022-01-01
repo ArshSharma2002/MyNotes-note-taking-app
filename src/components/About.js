@@ -1,9 +1,9 @@
-import React,{ useContext, useEffect } from 'react'
-import NoteContext from '../context/notes/NotesContext'
+import React from 'react'
+// import NoteContext from '../context/notes/NotesContext'
 
 export default function About() {
     // useContext is a func. to use any context which it takes as an argument.
-    const notesContext = useContext(NoteContext);
+    // const notesContext = useContext(NoteContext);
     // useEffect(() => {
     //     a.update();
     // }, []) // this array is given empty because we want to run this hook only once.

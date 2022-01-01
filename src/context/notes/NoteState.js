@@ -19,7 +19,7 @@ const NoteState = (props)=>{
           method: 'GET', // *GET, POST, PUT, DELETE, etc.
           headers: {
             'Content-Type': 'application/json',
-            'auth-token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0ZjY2YTM2MzQ0ODZkMTUwMjJhYWQ5In0sImlhdCI6MTYzNTg3MTI5Mn0.Wk8mcnCrfMSddmZs5r8dST1jGleUrPOxsMNRc3hjJW8'
+            'auth-token' : localStorage.getItem('token')
             
             
           }
@@ -42,7 +42,7 @@ const NoteState = (props)=>{
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           headers: {
             'Content-Type': 'application/json',
-            'auth-token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0ZjY2YTM2MzQ0ODZkMTUwMjJhYWQ5In0sImlhdCI6MTYzNTg3MTI5Mn0.Wk8mcnCrfMSddmZs5r8dST1jGleUrPOxsMNRc3hjJW8'
+            'auth-token' : localStorage.getItem('token')
             
             
           },
@@ -64,7 +64,8 @@ const NoteState = (props)=>{
           method: 'PUT', // *GET, POST, PUT, DELETE, etc.
           headers: {
             'Content-Type': 'application/json',
-            'auth-token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0ZjY2YTM2MzQ0ODZkMTUwMjJhYWQ5In0sImlhdCI6MTYzNTg3MTI5Mn0.Wk8mcnCrfMSddmZs5r8dST1jGleUrPOxsMNRc3hjJW8'
+            'auth-token' : localStorage.getItem('token')
+            
           },
           body: JSON.stringify({title,description,tag}) // body data type must match "Content-Type" header
         });
@@ -99,7 +100,7 @@ const NoteState = (props)=>{
           method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
           headers: {
             'Content-Type': 'application/json',
-            'auth-token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0ZjY2YTM2MzQ0ODZkMTUwMjJhYWQ5In0sImlhdCI6MTYzNTg3MTI5Mn0.Wk8mcnCrfMSddmZs5r8dST1jGleUrPOxsMNRc3hjJW8'
+            'auth-token' : localStorage.getItem('token')
           }
 
         });
@@ -112,6 +113,7 @@ const NoteState = (props)=>{
         })
 
         setNotes(newNotes)
+        
       }
 
 
